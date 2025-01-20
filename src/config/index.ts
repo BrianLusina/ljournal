@@ -2,6 +2,7 @@ import api from './api';
 import env from './env';
 import firebase from './firebase';
 import sentry from './sentry';
+import bugsnag from './bugsnag';
 
 export default {
   api,
@@ -10,4 +11,5 @@ export default {
   env,
   firebase,
   sentry,
+  bugsnag,
 };

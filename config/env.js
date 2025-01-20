@@ -91,8 +91,11 @@ function getClientEnvironment(publicUrl) {
 
         CMS_GRAPHQL_URL: process.env.CMS_GRAPHQL_URL,
         CMS_REST_API_URL: process.env.CMS_REST_API_URL,
-        CMS_TOKEN: process.env.CMS_TOKEN,
+        CMS_API_KEY: process.env.CMS_API_KEY,
         CMS_SPACE_ID: process.env.CMS_SPACE_ID,
+        CMS_PREVIEW_REST_API_URL: process.env.CMS_PREVIEW_REST_API_URL,
+        CMS_ENVIRONMENT: process.env.CMS_ENVIRONMENT,
+        CMS_PREVIEW: process.env.CMS_PREVIEW,
         NAME: process.env.NAME,
         TITLE: process.env.TITLE,
         SENTRY_DSN: process.env.SENTRY_DSN,
@@ -104,6 +107,12 @@ function getClientEnvironment(publicUrl) {
         FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
         FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
         FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
+        BUGSNAG_API_KEY: process.env.BUGSNAG_API_KEY,
+        EMAILJS_BASE_URL: process.env.EMAILJS_BASE_URL,
+        EMAILJS_SERVICE_ID: process.env.EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID: process.env.EMAILJS_TEMPLATE_ID,
+        EMAILJS_USER_ID: process.env.EMAILJS_USER_ID,
+        EMAILJS_ACCESS_TOKEN: process.env.EMAILJS_ACCESS_TOKEN,
       },
     );
   // Stringify all values so we can feed into webpack DefinePlugin

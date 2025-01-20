@@ -1,70 +1,36 @@
-import { Suspense, FunctionComponent, useState } from 'react';
+import { Suspense, FunctionComponent, useRef } from 'react';
 import Header from '@components/Header';
 import Footer from '@components/Footer';
 import MainLayout from '@layouts/MainLayout';
 import PageLoader from '@components/loaders/PageLoader';
 import Blurb from '@components/Blurb';
 import { withProfiler } from '@sentry/react';
-import Contact from '@components/ContactForm';
+import ContactForm from '@components/ContactForm';
 import config from '@config';
 import SocialCard from '@components/SocialCard';
 import usePageViews from '@hooks/analytics/usePageView';
-import analytics from '@analytics';
-import { captureException, captureScope, Levels } from '@monitoring';
-import { unixTimeStamp } from '@timeUtils';
-import notification from '@notification';
-import meta from '../data/meta';
-import { AppWrapper } from './styles';
-// TODO: move this to a CMS to be able to change the data dynamically
-import socialItems from '../data/social';
-
-// TODO: move this to a CMS to be able to change the data dynamically
-const { pages, siteDescription } = meta;
+import useGetBlurbs from '@hooks/useGetBlurbs';
+import { AppWrapper, Article, ArticleCard } from './styles';
 
 const App: FunctionComponent = () => {
   usePageViews();
-  const [loading, setLoading] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setError] = useState<Error | null>(null);
+  const contactCardRef = useRef<HTMLElement | null>(null);
+  const cardsRef = useRef<Map<string, HTMLElement> | null>(null);
+  const { loading, data: blurbs } = useGetBlurbs();
 
-  const onSubmitContact = async (data: { name: string; email: string; message: string }) => {
-    const { name, email, message } = data;
-    try {
-      setLoading(true);
+  const getMap = (): Map<string, HTMLElement> => {
+    let { current } = cardsRef;
+    if (!current) {
+      current = new Map();
+    }
+    return current;
+  };
 
-      // TODO: send email
-      console.log(data);
-
-      analytics.logEvent('contact_form_submit', {
-        name,
-        email,
-        message,
-      });
-
-      notification.success('Message sent successfully');
-      setLoading(false);
-    } catch (error) {
-      setError(error as Error);
-
-      captureException(
-        error as Error,
-        captureScope(
-          {
-            type: 'contact_form_submit',
-            level: Levels.Error,
-            message: 'Error sending contact form',
-            category: 'contact_form',
-            data,
-            timestamp: unixTimeStamp(new Date()),
-          },
-          Levels.Error,
-        ),
-        `Failed to send contact info. Err: ${(error as Error).message}`,
-      );
-
-      notification.error(`Failed to send message. Please try again later`);
-    } finally {
-      setLoading(false);
+  const displayCard = (cardId: string) => {
+    const map = getMap();
+    const node = map.get(cardId);
+    if (node) {
+      node.setAttribute('style', 'display: block');
     }
   };
 
@@ -73,19 +39,36 @@ const App: FunctionComponent = () => {
       <AppWrapper id="wrapper">
         <Header
           title={config.title}
-          description={siteDescription}
-          navItems={pages.map(({ title }) => ({ title: title.toLowerCase() }))}
+          navItems={blurbs.map(({ title }) => ({ title: title.toLocaleLowerCase() }))}
         />
         <MainLayout>
           <Suspense fallback={<PageLoader />}>
-            {pages.map(({ title, image, description }) => (
-              <Blurb key={title} title={title} image={image} description={description} />
-            ))}
-            <article id="contact">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              blurbs.map(({ title, image: { url }, description }) => (
+                <ArticleCard
+                  key={title}
+                  id={title.toLowerCase()}
+                  onClick={() => displayCard(title)}
+                  ref={(node) => {
+                    const map = getMap();
+                    if (node) {
+                      map.set(title, node);
+                    } else {
+                      map.delete(title);
+                    }
+                  }}
+                >
+                  <Blurb key={title} title={title} image={url} description={description} />
+                </ArticleCard>
+              ))
+            )}
+            <Article id="contact" ref={contactCardRef}>
               <h2 className="major">Contact</h2>
-              <Contact onSubmit={onSubmitContact} loading={loading} />
-              <SocialCard items={socialItems} />
-            </article>
+              <ContactForm />
+              <SocialCard />
+            </Article>
           </Suspense>
         </MainLayout>
         <Footer />

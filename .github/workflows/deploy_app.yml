@@ -54,6 +54,7 @@ jobs:
         FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - name: Deploy Staging
       if: github.ref == 'refs/heads/staging'
@@ -75,13 +76,15 @@ jobs:
         FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
-    - name: Push Production
-      if: github.ref == 'refs/heads/production'
-      run: |
-        git config --global user.name github-actions
-        git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'      
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-        git add docs
-        git commit -am "ci(github): publish site ${GITHUB_SHA}" || true
-        git push --force origin refs/heads/gh-pages || true
+# Not being deployed to production, as this might expose sensitive data in the minified build
+    # - name: Push Production
+    #   if: github.ref == 'refs/heads/production'
+    #   run: |
+    #     git config --global user.name github-actions
+    #     git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'      
+    #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+    #     git add docs
+    #     git commit -am "ci(github): publish site ${GITHUB_SHA}" || true
+    #     git push --force origin refs/heads/production || true

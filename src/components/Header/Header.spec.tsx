@@ -15,12 +15,6 @@ describe('Header', () => {
         title: faker.lorem.word(),
       },
     ];
-    render(
-      <Header
-        title={faker.lorem.sentence()}
-        description={faker.lorem.paragraph()}
-        navItems={pages}
-      />,
-    );
+    render(<Header title={faker.lorem.sentence()} navItems={pages} />);
   });
 });

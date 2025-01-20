@@ -1,27 +1,60 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import faker from 'faker';
+import { MockedResponseType } from '@testUtils/MockAppWithGqlProvider';
+import MockApp from '@testUtils/MockApp';
+import { GET_SOCIAL_INFO_QUERY } from '@graphQl/queries';
 import SocialCard from './SocialCard';
 
 describe('SocialCard', () => {
-  it('should render', () => {
-    const link = faker.internet.url();
-    const iconName = faker.lorem.word();
-    const label = faker.lorem.word();
+  it('should render', async () => {
+    const socialMock: MockedResponseType[] = [];
+    await act(async () => {
+      render(
+        <MockApp mocks={socialMock}>
+          <SocialCard />
+        </MockApp>,
+      );
+    });
+  });
 
-    const items = [
+  it('should display content as received from query', async () => {
+    const name = faker.lorem.word();
+    const link = faker.internet.url();
+
+    const socialMock: MockedResponseType[] = [
       {
-        link,
-        iconName,
-        label,
+        request: {
+          query: GET_SOCIAL_INFO_QUERY,
+        },
+        result: {
+          data: {
+            socialCollection: {
+              items: [
+                {
+                  name,
+                  link,
+                },
+              ],
+            },
+          },
+        },
       },
     ];
 
-    render(<SocialCard items={items} />);
+    await act(async () => {
+      render(
+        <MockApp mocks={socialMock}>
+          <SocialCard />
+        </MockApp>,
+      );
+    });
 
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const nameTextElement = screen.getByText(name);
     const linkElement = screen.getByRole('link');
-    const labelElement = screen.getByText(label);
 
-    expect(linkElement).toHaveAttribute('href', link);
-    expect(labelElement).toBeInTheDocument();
+    expect(nameTextElement).toBeInTheDocument();
+    expect(linkElement).toBeInTheDocument();
   });
 });

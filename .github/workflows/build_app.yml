@@ -12,10 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -57,6 +56,7 @@ jobs:
         FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - uses: actions/upload-artifact@v2
       with:

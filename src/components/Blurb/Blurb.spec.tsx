@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import faker from 'faker';
-import Blurb from './Blurb';
+import BlurbItem from './Blurb';
 
-describe('Blurb', () => {
+describe('BlurbItem', () => {
   const props = {
     title: faker.lorem.sentence(),
     image: faker.image.imageUrl(),
@@ -10,6 +10,6 @@ describe('Blurb', () => {
   };
 
   it('should render', () => {
-    render(<Blurb {...props} />);
+    render(<BlurbItem {...props} />);
   });
 });

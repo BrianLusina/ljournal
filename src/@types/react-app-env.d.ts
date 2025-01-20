@@ -11,8 +11,11 @@ declare namespace NodeJS {
     readonly SENTRY_TRACES_SAMPLE_RATE: number;
     readonly CMS_GRAPHQL_URL: string;
     readonly CMS_REST_API_URL: string;
-    readonly CMS_TOKEN: string;
+    readonly CMS_API_KEY: string;
     readonly CMS_SPACE_ID: string;
+    readonly CMS_PREVIEW_REST_API_URL: string;
+    readonly CMS_ENVIRONMENT: string;
+    readonly CMS_PREVIEW: string;
     readonly NAME: string;
     readonly TITLE: string;
     readonly FIREBASE_API_KEY: string;
@@ -21,7 +24,12 @@ declare namespace NodeJS {
     readonly FIREBASE_STORAGE_BUCKET: string;
     readonly FIREBASE_MESSAGING_SENDER_ID: string;
     readonly FIREBASE_APP_ID: string;
-    readonly FIREBASE_MEASUREMENT_ID: string;    
+    readonly FIREBASE_MEASUREMENT_ID: string;
+    readonly BUGSNAG_API_KEY: string; 
+    readonly EMAILJS_BASE_URL: string;
+    readonly EMAILJS_SERVICE_ID: string;
+    readonly EMAILJS_TEMPLATE_ID: string;
+    readonly EMAILJS_USER_ID: string;    
   }
 }
 

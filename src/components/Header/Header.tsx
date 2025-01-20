@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { HeaderProps } from './Header.types';
 
-const Header: FunctionComponent<HeaderProps> = ({ title, description, navItems }) => {
+const Header: FunctionComponent<HeaderProps> = ({ title, navItems }) => {
   return (
     <header id="header">
       <div className="logo">
@@ -11,7 +11,14 @@ const Header: FunctionComponent<HeaderProps> = ({ title, description, navItems }
         <div className="inner">
           <h1>{title}</h1>
           {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: description as string }} />
+          <div>
+            <p>
+              /fɪˈnɛstrə/
+              <br />
+              Window in Latin <br /> <br /> Welcome! <br /> <br />
+              Window into where I doodle, color and build engines with legos and sometimes crayons
+            </p>
+          </div>
         </div>
       </div>
       <nav>

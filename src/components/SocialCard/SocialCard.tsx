@@ -1,13 +1,21 @@
 import { FunctionComponent } from 'react';
-import { SocialCardProps } from './SocialCard.types';
+import useGetSocialData from '@hooks/useGetSocialData';
 import SocialCardItem from './SocialCardItem';
 
-const SocialCard: FunctionComponent<SocialCardProps> = ({ items }) => {
+const SocialCard: FunctionComponent = () => {
+  const { loading, error, data } = useGetSocialData();
+
+  if (loading) return <div>Loading...</div>;
+
+  if (error) {
+    return <p>Yikes! Something terrible has happened. Little bots are looking into this :)</p>;
+  }
+
   return (
     <ul className="icons">
-      {items.map(({ iconName, label, link }) => (
-        <li key={label}>
-          <SocialCardItem iconName={iconName} link={link} label={label} />
+      {(data || []).map(({ name, link }) => (
+        <li key={name}>
+          <SocialCardItem iconName={name.toLocaleLowerCase()} link={link} label={name} />
         </li>
       ))}
     </ul>

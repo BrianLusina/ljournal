@@ -54,6 +54,7 @@ jobs:
         FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - name: Create Sentry Staging release
       if: github.ref_name == 'staging'
@@ -80,6 +81,7 @@ jobs:
         FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - name: Create Sentry Production release
       if: github.ref_name == 'production'
